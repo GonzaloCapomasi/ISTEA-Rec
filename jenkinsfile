@@ -17,6 +17,13 @@ pipeline {
                 sh 'mvn clean package' 
             }
         }
+                stage('Code Review: SonarQube') {
+            steps {
+                withSonarQubeEnv(installationName: 'SonarQubeServer', credentialsId: 'SonarQubeToken') {
+                    sh 'mvn sonar:sonar -Dsonar.projectKey=ISTEA-Rec -Dsonar.host.url=http://192.168.0.108:9000 -Dsonar.login=54383680a87b0a2ce2c95c489a9690bc3bf6d41a'
+                }
+            }
+        }
          stage('Upload Artifact Nexus') {
             steps {
                 nexusArtifactUploader artifacts: [[artifactId: 'ISTEA-Rec', classifier: '', file: 'target/ISTEA-Rec.war', type: 'war']], credentialsId: 'TokenNexus', groupId: 'com.educacionit.java.web', nexusUrl: '192.168.0.108:8081/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'ISTEA-Multi-Rec-dev', version: '1.0.0.'+"${env.BUILD_NUMBER}" 
