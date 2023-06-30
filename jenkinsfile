@@ -1,0 +1,33 @@
+pipeline {
+    agent any
+    stages {
+        stage('Clone Repository') {
+            steps {
+                echo "Nro de Ejecucion: ${env.BUILD_NUMBER}"
+                git branch: 'dev', changelog: false, credentialsId: 'GonzaloCApomasi', poll: false, url: 'https://gitlab.com/gonzalocapomasisem2/istea-rec-simple.git'
+            }
+        }
+        stage('Maven Test') {
+            steps {
+                sh 'mvn test' 
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package' 
+            }
+        }
+         stage('Upload Artifact Nexus') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'ISTEA-Rec', classifier: '', file: 'target/ISTEA-Rec.war', type: 'war']], credentialsId: 'TokenNexus', groupId: 'com.educacionit.java.web', nexusUrl: '192.168.0.108:8081/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'ISTEA-Simple-Rec-dev', version: '1.0.0.'+"${env.BUILD_NUMBER}" 
+            }
+        }
+                stage('Delivery Artifcat: Deploy en Tomcat') {
+            steps {
+                sh 'cp target/ISTEA-Rec.war /tmp/webapps/ISTEA-Rec-1.0.0.' + "${env.BUILD_NUMBER}" + '.war'
+                echo "http://192.168.0.108:8887/ISTEA-Rec-1.0.0." + "${env.BUILD_NUMBER}" +"/index.xhtml"
+            }
+        }
+                
+    }
+}
