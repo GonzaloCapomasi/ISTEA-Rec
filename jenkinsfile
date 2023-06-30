@@ -19,7 +19,7 @@ pipeline {
         }
          stage('Upload Artifact Nexus') {
             steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'ISTEA-Rec', classifier: '', file: 'target/ISTEA-Rec.war', type: 'war']], credentialsId: 'TokenNexus', groupId: 'com.educacionit.java.web', nexusUrl: '192.168.0.108:8081/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'ISTEA-Simple-Rec-dev', version: '1.0.0.'+"${env.BUILD_NUMBER}" 
+                nexusArtifactUploader artifacts: [[artifactId: 'ISTEA-Rec', classifier: '', file: 'target/ISTEA-Rec.war', type: 'war']], credentialsId: 'TokenNexus', groupId: 'com.educacionit.java.web', nexusUrl: '192.168.0.108:8081/nexus', nexusVersion: 'nexus2', protocol: 'http', repository: 'ISTEA-Multi-Rec-releases', version: '1.0.0.'+"${env.BUILD_NUMBER}" 
             }
         }
                 stage('Delivery Artifcat: Deploy en Tomcat') {
