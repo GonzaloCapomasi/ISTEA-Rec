@@ -4,7 +4,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo "Nro de Ejecucion: ${env.BUILD_NUMBER}"
-                git branch: 'dev', changelog: false, credentialsId: 'GonzaloCApomasi', poll: false, url: 'https://gitlab.com/gonzalocapomasisem2/istea-rec-simple.git'
+                git branch: 'dev', changelog: false, credentialsId: 'GonzaloCApomasi', poll: false, url: 'https://gitlab.com/gonzalocapomasisem2/istea-rec.git'
             }
         }
         stage('Maven Test') {
